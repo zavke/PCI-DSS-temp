@@ -518,7 +518,7 @@ Resources:
           - name: EncryptCloudTrail
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: encrypttrail_handler
               Script: "def encrypttrail_handler(events, context):\r\n  import boto3\r\n  cloudtrail = boto3.client('cloudtrail')\r\n\r\n  CloudTrailLogGroupArn = events['CloudTrailLogGroupArn']\r\n  CloudWatchRoleArn\
                 \ = events['CloudWatchRoleArn']\r\n  TrailName = events['TrailName']\r\n  KMSKeyArn = events['KMSKeyArn']\r\n\r\n  response = cloudtrail.update_trail(\r\n    Name=TrailName,\r\n    IncludeGlobalServiceEvents=True,\r\
@@ -550,7 +550,7 @@ Resources:
           - name: rotatebackingkey
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: rotatebackingkey_handler
               Script: "def rotatebackingkey_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('kms')\r\n\r\n  KMSKeyArn = events['KMSKeyArn']\r\n\r\n  response = client.enable_key_rotation(\r\
                 \n    KeyId=KMSKeyArn\r\n  )"
@@ -586,7 +586,7 @@ Resources:
           - name: UpdateCloudTrail
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: updatetrail_handler
               Script: "def updatetrail_handler(events, context):\r\n  import boto3\r\n  cloudtrail = boto3.client('cloudtrail')\r\n\r\n  CloudTrailLogGroupArn = events['CloudTrailLogGroupArn']\r\n  CloudWatchRoleArn\
                 \ = events['CloudWatchRoleArn']\r\n  TrailName = events['TrailName']\r\n\r\n  response = cloudtrail.update_trail(\r\n    Name=TrailName,\r\n    IncludeGlobalServiceEvents=True,\r\n    IsMultiRegionTrail=True,\r\
@@ -614,7 +614,7 @@ Resources:
           - name: updatepasswordpolicy
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: updateiampolicy_handler
               Script: "def updateiampolicy_handler(events, context):\n  import boto3\n  iam = boto3.client('iam')\n\n  response = iam.update_account_password_policy(\n                AllowUsersToChangePassword=True,\n\
                 \                HardExpiry=True,\n                MaxPasswordAge=90 ,\n                MinimumPasswordLength=14,\n                PasswordReusePrevention=24,\n                RequireLowercaseCharacters=True,\n\
@@ -642,7 +642,7 @@ Resources:
           - name: deactivaterootiamaccesskey
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: deactivaterootiamaccesskey_handler
               Script: "def deactivaterootiamaccesskey_handler(events, context):\n  import boto3\n  import json\n  import os\n  iam = boto3.client('iam')\n  iam_resource = boto3.resource('iam')\n  try:\n\
                 \     username = events['username']\n     access_key = iam_resource.AccessKey(username, accessKeyId)\n     access_key.deactivate()\n  except Exception as e:\n     print(e)\n     raise\n"
@@ -673,7 +673,7 @@ Resources:
           - name: detachiamuserpolicy
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: detachiamuserpolicy_handler
               Script: "def detachiamuserpolicy_handler(events, context):\n  import boto3\n  import json\n  import os\n  client = boto3.client('iam')\n  securityhub = boto3.client('securityhub')\n  iam =\
                 \ boto3.resource('iam')\n  try:\n     userName = events['username']\n     findingid = events['findingid']\n     userpolicyresponse = client.list_attached_user_policies(UserName=userName)\n\
@@ -709,7 +709,7 @@ Resources:
           - name: detachiamfulladminpolicy
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: detachiamfulladminpolicy_handler
               Script: "def detachiamfulladminpolicy_handler(events, context):\n  import boto3\n  import json\n  import os\n  client = boto3.client('iam')\n  iam = boto3.resource('iam')\n  try:\n     userName\
                 \ = events['username']\n     userpolicyresponse = client.list_attached_user_policies(UserName=userName)\n     userpolicies =[]\n     userpolicies = userpolicyresponse.get(\"AttachedPolicies\"\
@@ -746,7 +746,7 @@ Resources:
           - name: EnableLogFileValidation
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: updatetrail_handler
               Script: "def updatetrail_handler(events, context):\r\n  import boto3\r\n  cloudtrail = boto3.client('cloudtrail')\r\n\r\n  CloudTrailLogGroupArn = events['CloudTrailLogGroupArn']\r\n  CloudWatchRoleArn\
                 \ = events['CloudWatchRoleArn']\r\n  TrailName = events['TrailName']\r\n\r\n  response = cloudtrail.update_trail(\r\n    Name=TrailName,\r\n    IncludeGlobalServiceEvents=True,\r\n    IsMultiRegionTrail=True,\r\
@@ -779,7 +779,7 @@ Resources:
           - name: RestrictSecurityGroup
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: restrict_sg
               Script: "def restrict_sg(events, context):\r\n  import boto3\r\n  import json\r\n  import os\r\n  ec2 = boto3.resource('ec2')\r\n  defaultSecGroupId = events['groupId']\r\n  try:\r\n     \
                 \ defaultSG = ec2.SecurityGroup(defaultSecGroupId)\r\n      defaultIngress = defaultSG.ip_permissions\r\n      defaultEgress = defaultSG.ip_permissions_egress\r\n      revokeIngress = defaultSG.revoke_ingress(IpPermissions=defaultIngress)\r\
@@ -808,7 +808,7 @@ Resources:
           - name: RemoveSecurityGroup
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  ec2 = boto3.client('ec2')\r\n\r\n  groupId = events['groupId']\r\n  \r\n  response = ec2.delete_security_group(\r\n   \
                 \ GroupId= groupId\r\n  )\r\n "
@@ -835,7 +835,7 @@ Resources:
           - name: ReleaseEIP
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('ec2')\r\n\r\n  allocationId = events['allocationId']\r\n\r\n  response = client.release_address(\r\
                 \n    AllocationId= allocationId\r\n  )"
@@ -865,7 +865,7 @@ Resources:
           - name: RestrictSecurityGroup
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: restrict_sg
               Script: "def restrict_sg(events, context):\r\n  import boto3\r\n  import json\r\n  import os\r\n  ec2 = boto3.resource('ec2')\r\n  defaultSecGroupId = events['groupId']\r\n  try:\r\n     \
                 \ defaultSG = ec2.SecurityGroup(defaultSecGroupId)\r\n      defaultIngress = defaultSG.ip_permissions\r\n      defaultEgress = defaultSG.ip_permissions_egress\r\n      revokeIngress = defaultSG.revoke_ingress(IpPermissions=defaultIngress)\r\
@@ -906,7 +906,7 @@ Resources:
           - name: EnableFlowLogs
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: enableflowlogs_handler
               Script: "def enableflowlogs_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('ec2')\r\n\r\n  CloudWatchLogGroupArn = events['CloudWatchLogGroupArn']\r\n  FlowLogRoleArn\
                 \ = events['FlowLogRoleArn']\r\n  CloudWatchLogGroupName = events['CloudWatchLogGroupName']\r\n  VpcId = events['VpcId']\r\n  AutomationAssumeRole = events['AutomationAssumeRole']\r\n\r\n\
@@ -938,7 +938,7 @@ Resources:
           - name: AutoScalingELBHealthCheck
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('autoscaling')\r\n  ASGGroupName = events['ASGGroupName']\r\n\r\n  response = client.update_auto_scaling_group(\r\
                 \n    AutoScalingGroupName= ASGGroupName,\r\n    HealthCheckType='ELB',\r\n    HealthCheckGracePeriod=300\r\n  )"
@@ -965,7 +965,7 @@ Resources:
           - name: CodeBuildUpdateProject
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('codebuild')\r\n  projectName = events['projectName']\r\n\r\n  response = client.batch_get_projects(\r\
                 \n      names=[\r\n       projectName\r\n      ]\r\n  )\r\n    \r\n  projectenv = response['projects'][0]['environment']\r\n  projectenv1_type = \"projectenv type: \" + projectenv['type']\r\
@@ -998,7 +998,7 @@ Resources:
           - name: ModifyRDSSnapshot
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('rds')\r\n  snapshotId = events['snapshotId']\r\n  snapshotType = events['snapshotType']\r\n\r\n\
                 \  if snapshotType == \"AwsRdsDBClusterSnapshot\":\r\n      response = client.modify_db_cluster_snapshot_attribute(\r\n        DBClusterSnapshotIdentifier=snapshotId,\r\n        AttributeName='restore',\r\
@@ -1028,7 +1028,7 @@ Resources:
           - name: ModifyRedshiftCluster
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('redshift')\r\n\r\n  clusterId = events['clusterId']\r\n\r\n  response = client.modify_cluster(\r\
                 \n    ClusterIdentifier=clusterId,\r\n    PubliclyAccessible= False\r\n  )"
@@ -1055,7 +1055,7 @@ Resources:
           - name: ModifyRDSDBInstance
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('rds')\r\n  dbinstanceId = events['dbinstanceId']\r\n\r\n  response = client.modify_db_instance(\r\
                 \n    ApplyImmediately=True,\r\n    DBInstanceIdentifier=dbinstanceId,\r\n    PubliclyAccessible= False\r\n  )"
@@ -1084,7 +1084,7 @@ Resources:
           - name: RestrictLambda
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  import json\r\n  \r\n  client = boto3.client('lambda')\r\n  functionname = events['functionname']\r\n  accountID = events['accountID']\r\
                 \n  response = client.get_policy(FunctionName=functionname)\r\n  policy = response['Policy']\r\n  policy_json = json.loads(policy)\r\n  statements = policy_json['Statement']\r\n  \r\n  for\
@@ -1129,7 +1129,7 @@ Resources:
           - name: RestrictLambdaVPC
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  \r\n  import boto3\r\n  \r\n  client = boto3.client('lambda')\r\n  functionname = events['functionname']\r\n  rolearn = events['rolearn']\r\
                 \n  subnet1id = events['subnet1id']\r\n  subnet2id = events['subnet2id']\r\n  securitygroupid = events['securitygroupid']\r\n\r\n\r\n  subnets = [subnet1id, subnet2id]\r\n  securitygroups\
@@ -1166,7 +1166,7 @@ Resources:
           - name: S3Replication
             action: aws:executeScript
             inputs:
-              Runtime: python3.10
+              Runtime: python3.8
               Handler: script_handler
               Script: "def script_handler(events, context):\r\n  import boto3\r\n  client = boto3.client('s3')\r\n\r\n  SourceBucketName = events['SourceBucketName']\r\n  DestinationBucketName = events['DestinationBucketName']\r\
                 \n  S3IAMReplicationRole = events['S3IAMReplicationRole']\r\n    \r\n  DestinationBucketArn = \"arn:aws:s3:::\" + DestinationBucketName\r\n  \r\n  response = client.put_bucket_replication(\r\
